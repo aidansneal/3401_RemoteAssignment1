@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -21,6 +21,10 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rb;
     private int _remainingHealth = 3;
     private int _pickupsCollected = 0;
+
+
+
+    public AudioSource CoinSound;
 
     #endregion Variables
     
@@ -92,6 +96,7 @@ public class PlayerController : MonoBehaviour
         else if (other.gameObject.layer == pickupLayer)
         {
             OnPickupCollision();
+            
         }
         
         // Destroy the gameObject we collided with
@@ -114,7 +119,9 @@ public class PlayerController : MonoBehaviour
         // Are we dead?
         if (_remainingHealth <= 0)
         {
-            Debug.Log("Dead!");
+           SceneManager.LoadScene("GameScene");
+
+            Debug.Log("GAME OVER!");
         }
     }
     
@@ -125,8 +132,10 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void OnPickupCollision()
     {
+   
         _pickupsCollected += 1;
         uiController.ReportPickupCount(_pickupsCollected);
+        CoinSound.Play();
     }
 
     #endregion Collision
